@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bai_Jamjuree, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const baiJamjuree = Bai_Jamjuree({
   variable: "--font-bai",
@@ -33,6 +34,7 @@ export default function RootLayout({
       style={{ scrollBehavior: "smooth" }}
     >
       <body>{children}</body>
+      <Analytics />
     </html>
   );
 }

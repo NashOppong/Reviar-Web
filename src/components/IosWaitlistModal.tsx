@@ -54,7 +54,7 @@ export default function IosWaitlistModal({ trigger }: IosWaitlistModalProps) {
     e.preventDefault();
     setStatus("loading");
     try {
-      await fetch("https://reviar-api.onrender.com/api/v1/wishlists/add", {
+      await fetch("https://reviar-api.onrender.com/api/v1/waitlist/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email }),

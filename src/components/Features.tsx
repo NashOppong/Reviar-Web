@@ -519,7 +519,7 @@ export default function Features() {
                 </svg>
               </Icon>
               <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
-                Workspaces, not group chats
+                Workspaces
               </h3>
               <p
                 style={{
