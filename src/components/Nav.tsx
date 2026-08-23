@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { release } from "./FinalCta";
 
 export default function Nav() {
   return (
@@ -37,15 +38,38 @@ export default function Nav() {
             display: "flex",
             alignItems: "center",
             gap: 10,
-            fontFamily: "var(--font-space-grotesk), 'Space Grotesk', sans-serif",
+            fontFamily:
+              "var(--font-space-grotesk), 'Space Grotesk', sans-serif",
             fontWeight: 600,
             fontSize: 17,
             marginRight: "auto",
           }}
         >
-          <svg width={24} height={24} viewBox="0 0 40 40" fill="none" aria-hidden>
-            <rect x="3" y="3" width="16" height="16" rx="6" stroke="#00e5ff" strokeWidth="3" />
-            <rect x="21" y="21" width="16" height="16" rx="6" stroke="#b000ff" strokeWidth="3" />
+          <svg
+            width={24}
+            height={24}
+            viewBox="0 0 40 40"
+            fill="none"
+            aria-hidden
+          >
+            <rect
+              x="3"
+              y="3"
+              width="16"
+              height="16"
+              rx="6"
+              stroke="#00e5ff"
+              strokeWidth="3"
+            />
+            <rect
+              x="21"
+              y="21"
+              width="16"
+              height="16"
+              rx="6"
+              stroke="#b000ff"
+              strokeWidth="3"
+            />
             <circle cx="20" cy="20" r="2.4" fill="#f8fafc" />
           </svg>
           Reviar
@@ -54,16 +78,27 @@ export default function Nav() {
         {/* Nav links — hidden on mobile via inline media-like approach */}
         <div
           className="nav-links"
-          style={{ display: "flex", gap: 26, fontSize: 14, color: "var(--text-dim)" }}
+          style={{
+            display: "flex",
+            gap: 26,
+            fontSize: 14,
+            color: "var(--text-dim)",
+          }}
         >
-          <Link href="#features" style={{ transition: "color 0.2s" }}>Product</Link>
-          <Link href="#how" style={{ transition: "color 0.2s" }}>How it works</Link>
-          <Link href="#footer" style={{ transition: "color 0.2s" }}>For PMs</Link>
+          <Link href="#features" style={{ transition: "color 0.2s" }}>
+            Product
+          </Link>
+          <Link href="#how" style={{ transition: "color 0.2s" }}>
+            How it works
+          </Link>
+          <Link href="#footer" style={{ transition: "color 0.2s" }}>
+            For PMs
+          </Link>
         </div>
 
         {/* CTA */}
         <Link
-          href="#download"
+          href={release}
           style={{
             background: "var(--cyan)",
             color: "#04121a",

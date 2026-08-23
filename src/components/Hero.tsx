@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import PhoneCarousel from "./PhoneCarousel";
 import GradText from "./GradText";
+import IosWaitlistModal from "./IosWaitlistModal";
+import { release } from "./FinalCta";
 
 export default function Hero() {
   return (
@@ -77,23 +81,28 @@ export default function Hero() {
               <strong style={{ color: "var(--text)", fontWeight: 600 }}>
                 Reviar auto-provisions the entire workspace
               </strong>{" "}
-              — RBAC-gated channels, Kanban, Huddles, even the friendship that outlasts
+              — RBAC-gated channels, Kanban, Pods (Voice chat system), even the friendship that outlasts
               the project — the instant a PM taps Accept.
             </p>
 
             <div className="cta-row" id="download">
-              <Link href="#" className="btn btn-primary">
+              <Link href={release} className="btn btn-primary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
                   <path d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14" />
                 </svg>
                 Download APK
               </Link>
-              <Link href="#" className="btn btn-ghost">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-                  <path d="M17 2H7a2 2 0 00-2 2v16a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2zM12 18h.01" />
-                </svg>
-                Notify me for iOS
-              </Link>
+              <IosWaitlistModal
+                trigger={
+                  <span className="btn btn-ghost" style={{ cursor: "pointer" }}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden
+                      style={{ width: 18, height: 18 }}>
+                      <path d="M17 2H7a2 2 0 00-2 2v16a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2zM12 18h.01" />
+                    </svg>
+                    Notify me for iOS
+                  </span>
+                }
+              />
             </div>
 
             <p
