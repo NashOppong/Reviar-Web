@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reviar — Stop matching. Start shipping.</title>
+<link rel="icon" href="icon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#00e5ff;
+    --purple:#b000ff;
+    --bg:#05070d;
+    --surface:#0e1320;
+    --surface-2:#151d30;
+    --text:#f8fafc;
+    --text-dim:#8b96ac;
+    --text-faint:#4d5871;
+    --border:#1c2438;
+    --success:#00f5a0;
+    --warning:#ffb703;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-0.02em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--cyan);color:#04121a;}
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px;}
+  img,svg{display:block;}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px;}
+  @media(prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}
+    html{scroll-behavior:auto;}
+  }
+
+  /* ---------- ambient background ---------- */
+  .mesh{position:fixed;border-radius:50%;filter:blur(140px);pointer-events:none;z-index:0;}
+  .mesh-cyan{width:560px;height:560px;background:var(--cyan);top:-220px;left:-180px;opacity:0.16;}
+  .mesh-purple{width:620px;height:620px;background:var(--purple);top:20%;right:-280px;opacity:0.13;}
+  .mesh-cyan-2{width:460px;height:460px;background:var(--cyan);bottom:-40px;left:26%;opacity:0.06;}
+  .mesh-purple-2{width:420px;height:420px;background:var(--purple);bottom:10%;right:8%;opacity:0.08;}
+
+  /* signature brand-mark pattern drifting through the page */
+  .mark-field{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.5;}
+  .mark-field svg{position:absolute;}
+
+  /* ---------- nav ---------- */
+  .nav-outer{position:fixed;top:18px;left:0;right:0;display:flex;justify-content:center;z-index:100;padding:0 16px;}
+  .nav{
+    display:flex;align-items:center;gap:8px;width:100%;max-width:860px;
+    padding:10px 10px 10px 18px;border-radius:999px;
+    background:rgba(14,19,32,0.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border:1px solid rgba(0,229,255,0.16);
+    box-shadow:0 8px 32px rgba(0,0,0,0.45);
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;margin-right:auto;}
+  .logo-mark{width:24px;height:24px;flex-shrink:0;}
+  .nav-links{display:flex;gap:26px;font-size:14px;color:var(--text-dim);}
+  .nav-links a{transition:color .2s ease;}
+  .nav-links a:hover{color:var(--text);}
+  .nav-cta{
+    background:var(--cyan);color:#04121a;font-weight:700;font-size:13.5px;
+    padding:9px 18px;border-radius:999px;white-space:nowrap;
+    box-shadow:0 0 22px rgba(0,229,255,0.35);
+    transition:box-shadow .25s ease, transform .2s ease;
+  }
+  .nav-cta:hover{box-shadow:0 0 30px rgba(0,229,255,0.65);transform:translateY(-1px);}
+  @media(max-width:760px){.nav-links{display:none;}}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:140px 0 70px;overflow:hidden;}
+  .hero::before{
+    content:'';position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,0.05) 1.2px, transparent 1.2px);
+    background-size:26px 26px;
+    -webkit-mask-image:radial-gradient(ellipse 80% 65% at 50% 15%, black 30%, transparent 85%);
+    mask-image:radial-gradient(ellipse 80% 65% at 50% 15%, black 30%, transparent 85%);
+    z-index:0;
+  }
+  .hero .wrap{display:grid;grid-template-columns:1.05fr 0.95fr;gap:40px;align-items:center;position:relative;z-index:2;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;
+    font-size:12px;font-weight:500;letter-spacing:0.04em;color:var(--cyan);
+    background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.28);
+    padding:6px 14px;border-radius:999px;margin-bottom:24px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--success);box-shadow:0 0 8px var(--success);animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+  .hero h1{font-size:clamp(2.5rem, 5vw, 4.4rem);line-height:1.04;font-weight:700;margin-bottom:22px;}
+  .grad-text{background:linear-gradient(100deg, var(--cyan) 10%, var(--purple) 85%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .hero-sub{font-size:17px;line-height:1.65;color:var(--text-dim);max-width:500px;margin-bottom:34px;}
+  .hero-sub b{color:var(--text);font-weight:600;}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px;}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 26px;border-radius:12px;font-weight:700;font-size:14.5px;transition:all .25s ease;border:1px solid transparent;}
+  .btn-primary{background:var(--cyan);color:#04121a;box-shadow:0 0 26px rgba(0,229,255,0.4);}
+  .btn-primary:hover{box-shadow:0 0 40px rgba(0,229,255,0.65);transform:translateY(-2px);}
+  .btn-ghost{background:rgba(255,255,255,0.045);border:1px solid rgba(255,255,255,0.16);color:var(--text);backdrop-filter:blur(10px);}
+  .btn-ghost:hover{border-color:rgba(176,0,255,0.55);background:rgba(176,0,255,0.08);box-shadow:0 0 24px rgba(176,0,255,0.25);}
+  .btn svg{width:18px;height:18px;}
+  .hero-note{font-size:12.5px;color:var(--text-faint);font-family:'JetBrains Mono',monospace;}
+
+  /* phone mockup — Pixel-style body */
+  .phone-stage{position:relative;display:flex;justify-content:center;align-items:center;min-height:560px;}
+  .orb{position:absolute;border-radius:50%;filter:blur(75px);}
+  .orb-cyan{width:280px;height:280px;background:var(--cyan);opacity:0.32;top:6%;left:6%;}
+  .orb-purple{width:260px;height:260px;background:var(--purple);opacity:0.34;bottom:4%;right:4%;}
+
+  .phone{
+    position:relative;width:276px;height:580px;border-radius:44px;z-index:2;
+    background:linear-gradient(155deg, #3a4256 0%, #1b202e 45%, #0c0f18 100%);
+    padding:3px;
+    box-shadow:
+      0 45px 100px -22px rgba(0,0,0,0.7),
+      0 0 80px -8px rgba(0,229,255,0.22),
+      inset 0 0 0 1px rgba(255,255,255,0.08);
+  }
+  .phone-inner{width:100%;height:100%;border-radius:41px;background:#05070a;padding:8px;position:relative;}
+  .phone-cam{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;background:#010204;border:1px solid rgba(255,255,255,0.12);box-shadow:inset 0 0 3px rgba(0,229,255,0.6);z-index:6;}
+  .phone-btn{position:absolute;right:-3px;width:3px;border-radius:2px 0 0 2px;background:linear-gradient(180deg,#4a5064,#20242f);}
+  .phone-btn.power{top:150px;height:66px;}
+  .phone-btn.volume{top:226px;height:98px;}
+  .phone-screen{width:100%;height:100%;border-radius:34px;background:var(--bg);overflow:hidden;position:relative;}
+  .phone-screen::after{
+    content:'';position:absolute;inset:0;pointer-events:none;z-index:8;border-radius:34px;
+    background:linear-gradient(115deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 16%);
+  }
+  .hero-shots{position:relative;width:100%;height:100%;}
+  .hero-shots img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:0;transition:opacity .9s ease;}
+  .hero-shots img.active{opacity:1;}
+  .hero-caption{
+    position:absolute;left:9px;right:9px;bottom:9px;z-index:7;display:flex;align-items:center;gap:8px;
+    padding:9px 12px;border-radius:12px;background:rgba(5,7,10,0.78);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.12);font-size:11.5px;font-weight:500;color:var(--text);
+  }
+  .hero-caption .hc-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);flex-shrink:0;}
+  .hero-progress{position:absolute;top:9px;left:9px;right:9px;display:flex;gap:3px;z-index:7;}
+  .hero-progress span{flex:1;height:2.5px;border-radius:2px;background:rgba(255,255,255,0.18);overflow:hidden;}
+  .hero-progress span i{display:block;height:100%;width:0%;background:var(--cyan);}
+  .hero-progress span.done i{width:100%;background:rgba(255,255,255,0.55);}
+  .hero-progress span.active i{width:100%;background:var(--cyan);transition:width 2.5s linear;}
+
+  @media(max-width:760px){
+    .hero .wrap{grid-template-columns:1fr;}
+    .phone-stage{min-height:420px;order:-1;}
+    .phone{width:224px;height:470px;}
+  }
+
+  /* ---------- section shell ---------- */
+  .section{position:relative;padding:110px 0;z-index:1;}
+  .section-head{max-width:620px;margin-bottom:56px;}
+  .section-eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;letter-spacing:0.06em;color:var(--purple);text-transform:uppercase;margin-bottom:14px;display:block;}
+  .section h2{font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:600;line-height:1.2;margin-bottom:16px;}
+  .section-desc{color:var(--text-dim);font-size:16px;line-height:1.65;}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* ---------- problem strip ---------- */
+  .problem{position:relative;padding:70px 0;z-index:1;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .problem-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:36px;align-items:center;}
+  .problem-col{padding:26px;border-radius:18px;}
+  .problem-col.bad{background:rgba(255,77,109,0.04);border:1px solid rgba(255,77,109,0.16);}
+  .problem-col.good{background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.22);}
+  .problem-label{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:14px;display:block;}
+  .problem-col.bad .problem-label{color:#ff6b87;}
+  .problem-col.good .problem-label{color:var(--cyan);}
+  .problem-col p{font-size:15px;line-height:1.6;color:var(--text-dim);}
+  .problem-col .names{font-size:13px;color:var(--text-faint);margin-top:12px;font-family:'JetBrains Mono',monospace;}
+  .problem-arrow{width:34px;height:34px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .problem-arrow svg{width:16px;height:16px;stroke:var(--text-dim);}
+  @media(max-width:760px){.problem-grid{grid-template-columns:1fr;}.problem-arrow{transform:rotate(90deg);margin:0 auto;}}
+
+  /* ---------- bento ---------- */
+  .bento{
+    display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(150px,auto);gap:18px;
+    grid-template-areas:
+      "explore explore friends"
+      "trust   sig      sig"
+      "trust   kanban   github"
+      "trust   huddles  huddles";
+  }
+  .card{
+    background:rgba(14,19,32,0.6);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border:1px solid var(--border);border-radius:20px;padding:26px;position:relative;overflow:hidden;
+    transition:border-color .3s ease, transform .3s ease;
+  }
+  .card:hover{border-color:rgba(0,229,255,0.35);transform:translateY(-3px);}
+  .card:hover::after{opacity:1;}
+  .card::after{
+    content:'';position:absolute;inset:0;border-radius:20px;padding:1px;
+    background:linear-gradient(135deg, rgba(0,229,255,0.5), rgba(176,0,255,0.32));
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .3s ease;pointer-events:none;
+  }
+  .card-icon{width:36px;height:36px;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;margin-bottom:18px;flex-shrink:0;}
+  .card-icon svg{width:18px;height:18px;stroke:var(--cyan);}
+  .card h3{font-size:16.5px;font-weight:600;margin-bottom:8px;}
+  .card p{font-size:13.5px;line-height:1.58;color:var(--text-dim);}
+  .card .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--purple);background:rgba(176,0,255,0.1);border:1px solid rgba(176,0,255,0.28);padding:3px 8px;border-radius:6px;margin-bottom:12px;}
+
+  .card-shot{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);position:relative;flex-shrink:0;}
+  .card-shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:top center;}
+  .card-shot::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, transparent 50%, rgba(5,7,13,0.6));pointer-events:none;}
+
+  .card-explore{grid-area:explore;display:flex;gap:22px;align-items:center;}
+  .card-explore .card-text{flex:1;min-width:0;}
+  .card-explore .card-shot{width:150px;height:200px;}
+  .card-friends{grid-area:friends;display:flex;flex-direction:column;}
+  .card-friends .card-shot{flex:1;min-height:120px;margin-top:14px;}
+  .card-trust{grid-area:trust;display:flex;flex-direction:column;}
+  .card-trust .card-shot{flex:1;min-height:190px;margin-top:16px;}
+  .card-sig{grid-area:sig;}
+  .card-kanban{grid-area:kanban;display:flex;flex-direction:column;}
+  .card-kanban .card-shot{height:126px;margin-top:14px;}
+  .card-github{grid-area:github;display:flex;flex-direction:column;}
+  .card-github .card-shot{height:126px;margin-top:14px;}
+  .card-huddles{grid-area:huddles;display:flex;flex-direction:column;justify-content:center;}
+
+  .sig-card{background:linear-gradient(135deg, rgba(0,229,255,0.07), rgba(176,0,255,0.09));}
+  .sig-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;gap:12px;}
+  .sig-timer{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--cyan);background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.25);padding:4px 10px;border-radius:8px;flex-shrink:0;}
+  .sig-track{display:flex;gap:8px;flex-wrap:wrap;}
+  .sig-chip{font-family:'JetBrains Mono',monospace;font-size:11px;padding:7px 12px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);color:var(--text-dim);opacity:0;transform:scale(0.9);}
+  .sig-chip.pm{color:var(--warning);border-color:rgba(255,183,3,0.3);}
+  .card-sig.in .sig-chip{animation:chipPop .45s cubic-bezier(.2,.8,.3,1.2) forwards;}
+  .card-sig.in .sig-chip:nth-child(1){animation-delay:.05s;}
+  .card-sig.in .sig-chip:nth-child(2){animation-delay:.25s;}
+  .card-sig.in .sig-chip:nth-child(3){animation-delay:.45s;}
+  .card-sig.in .sig-chip:nth-child(4){animation-delay:.65s;color:var(--success);border-color:rgba(0,245,160,0.35);}
+  .card-sig.in .sig-chip:nth-child(5){animation-delay:.85s;color:var(--success);border-color:rgba(0,245,160,0.35);}
+  .card-sig.in .sig-chip:nth-child(6){animation-delay:1.05s;color:var(--success);border-color:rgba(0,245,160,0.35);}
+  @keyframes chipPop{to{opacity:1;transform:scale(1);}}
+
+  @media(max-width:900px){
+    .bento{grid-template-columns:1fr;grid-template-areas:none;}
+    .card-explore,.card-friends,.card-trust,.card-sig,.card-kanban,.card-github,.card-huddles{grid-area:auto;}
+    .card-explore{flex-direction:column;align-items:stretch;}
+    .card-explore .card-shot{width:100%;height:200px;}
+  }
+
+  /* ---------- timeline ---------- */
+  .timeline{position:relative;max-width:680px;margin:0 auto;}
+  .timeline::before{content:'';position:absolute;left:23px;top:8px;bottom:8px;width:1px;background:linear-gradient(180deg, var(--cyan), var(--purple));opacity:0.35;}
+  .t-step{display:flex;gap:24px;padding-bottom:52px;position:relative;}
+  .t-step:last-child{padding-bottom:0;}
+  .t-num{flex-shrink:0;width:47px;height:47px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:500;font-size:14px;color:var(--cyan);z-index:1;}
+  .t-step.active .t-num{border-color:var(--cyan);box-shadow:0 0 20px rgba(0,229,255,0.35);}
+  .t-body h3{font-size:17px;font-weight:600;margin-bottom:6px;margin-top:10px;}
+  .t-body p{font-size:14.5px;color:var(--text-dim);line-height:1.6;max-width:460px;}
+
+  /* ---------- final cta ---------- */
+  .final-cta{position:relative;padding:150px 0;text-align:center;overflow:hidden;}
+  .final-cta::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at 50% 40%, rgba(0,229,255,0.16), transparent 55%),
+               radial-gradient(circle at 60% 60%, rgba(176,0,255,0.14), transparent 55%);
+    z-index:0;
+  }
+  .final-inner{position:relative;z-index:1;}
+  .final-cta h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:700;margin-bottom:18px;line-height:1.1;}
+  .final-cta p{color:var(--text-dim);font-size:16.5px;max-width:480px;margin:0 auto 40px;}
+  .final-cta .cta-row{justify-content:center;}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--border);padding:36px 0;position:relative;z-index:1;}
+  .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  .footer-left{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--text-faint);}
+  .footer-logo{height:16px;width:auto;opacity:0.8;}
+  .footer-links{display:flex;gap:20px;font-size:13px;color:var(--text-dim);}
+  .footer-links a:hover{color:var(--text);}
+  .footer-social{display:flex;gap:14px;}
+  .footer-social a{width:32px;height:32px;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);transition:all .2s ease;}
+  .footer-social a:hover{color:var(--cyan);border-color:rgba(0,229,255,0.35);}
+  .footer-social svg{width:15px;height:15px;}
+  @media(max-width:720px){.footer-inner{flex-direction:column;align-items:flex-start;}}
+</style>
+</head>
+<body>
+
+<div class="mesh mesh-cyan"></div>
+<div class="mesh mesh-purple"></div>
+<div class="mesh mesh-cyan-2"></div>
+<div class="mesh mesh-purple-2"></div>
+
+<!-- NAV -->
+<div class="nav-outer">
+  <nav class="nav">
+    <a class="logo" href="#top">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+        <rect x="3" y="3" width="16" height="16" rx="6" stroke="#00e5ff" stroke-width="3"/>
+        <rect x="21" y="21" width="16" height="16" rx="6" stroke="#b000ff" stroke-width="3"/>
+        <circle cx="20" cy="20" r="2.4" fill="#f8fafc"/>
+      </svg>
+      Reviar
+    </a>
+    <div class="nav-links">
+      <a href="#features">Product</a>
+      <a href="#how">How it works</a>
+      <a href="#footer">For PMs</a>
+    </div>
+    <a class="nav-cta" href="#download">Download APK</a>
+  </nav>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> OPEN BETA · ANDROID</div>
+      <h1>Stop matching.<br><span class="grad-text">Start shipping.</span></h1>
+      <p class="hero-sub">
+        Every dev-matching app hands you a swipe deck, a match, and a bare DM thread — then wishes you luck.
+        <b>Reviar auto-provisions the entire workspace</b> — RBAC-gated channels, Kanban, Huddles, even the friendship that outlasts the project — the instant a PM taps Accept.
+      </p>
+      <div class="cta-row" id="download">
+        <a class="btn btn-primary" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+          Download APK
+        </a>
+        <a class="btn btn-ghost" href="#">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2H7a2 2 0 00-2 2v16a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2zM12 18h.01"/></svg>
+          Notify me for iOS
+        </a>
+      </div>
+      <div class="hero-note">$ direct-install · v0.9-beta · android-now · ios-and-web-next</div>
+    </div>
+
+    <div class="phone-stage">
+      <div class="orb orb-cyan"></div>
+      <div class="orb orb-purple"></div>
+      <div class="phone">
+        <div class="phone-cam"></div>
+        <div class="phone-btn power"></div>
+        <div class="phone-btn volume"></div>
+        <div class="phone-inner">
+          <div class="phone-screen">
+            <div class="hero-progress" id="heroProgress"></div>
+            <div class="hero-shots" id="heroShots">
+              <img src="shots/shot_1786317249.webp" class="active" alt="Reviar sign-in screen">
+              <img src="shots/shot_1786317026.webp" alt="Reviar Explore feed of open roles">
+              <img src="shots/shot_1786317049.webp" alt="Reviar project detail with apply button">
+              <img src="shots/shot_1786317005.webp" alt="Reviar workspaces list">
+              <img src="shots/shot_1786317188.webp" alt="Reviar channel sidebar">
+              <img src="shots/shot_1786317149.webp" alt="Reviar Kanban board wired to channels">
+              <img src="shots/shot_1786317180.webp" alt="Reviar channel conversation">
+              <img src="shots/shot_1786317121.webp" alt="Reviar member profile with add friend">
+              <img src="shots/shot_1786317427.webp" alt="Reviar RBAC channel access toggle">
+              <img src="shots/shot_1786316969.webp" alt="Reviar profile screen">
+              <img src="shots/shot_1786317402.webp" alt="Reviar profile with GitHub contribution graph">
+              <img src="shots/shot_1786317464.webp" alt="Reviar messages and friend requests">
+            </div>
+            <div class="hero-caption"><span class="hc-dot"></span><span id="heroCaptionText">Sign in — email or GitHub</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM STRIP -->
+<section class="problem">
+  <div class="wrap">
+    <div class="problem-grid reveal">
+      <div class="problem-col bad">
+        <span class="problem-label">// every other app</span>
+        <p>Swipe, match, land in a bare DM thread. Figuring out roles, permissions, and where the actual work happens is entirely on you.</p>
+        <div class="names">HackMate · Match&amp;Hack · CoffeeSpace · VenturLoop</div>
+      </div>
+      <div class="problem-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m0 0l-6-6m6 6l-6 6"/></svg></div>
+      <div class="problem-col good">
+        <span class="problem-label">// reviar</span>
+        <p>PM taps Accept. A governed workspace provisions itself — channels, roles, Kanban, and a permission ladder already in place.</p>
+        <div class="names">no swipe deck · no manual setup</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-eyebrow">The product</span>
+      <h2>Everything a team needs, none of the setup.</h2>
+      <p class="section-desc">Discovery, workspaces, permissions, tasks, and the relationships that stick around after the sprint ends — built as one continuous flow instead of six separate apps duct-taped together.</p>
+    </div>
+
+    <div class="bento">
+      <div class="card card-explore reveal">
+        <div class="card-text">
+          <span class="tag">GET /explore</span>
+          <h3>A feed, not a deck</h3>
+          <p>Filter open roles by stack and see verified GitHub stats before you ever apply. Browsing and applying are two separate, deliberate taps — no swipe, no mutual-match state, no wasted right-swipes on roles you'll never hear back from.</p>
+        </div>
+        <div class="card-shot"><img src="shots/shot_1786317026.webp" alt="Explore feed of open project roles"></div>
+      </div>
+
+      <div class="card card-friends reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <h3>Friends outlive the project</h3>
+        <p>DMs aren't locked to a shared workspace. Add someone as a friend and keep talking long after the sprint wraps.</p>
+        <div class="card-shot"><img src="shots/shot_1786317464.webp" alt="Reviar messages list with friend requests"></div>
+      </div>
+
+      <div class="card card-trust reveal">
+        <span class="tag">RBAC</span>
+        <h3>Access earned, not assumed</h3>
+        <p>New contributors land in #general. As trust builds, a PM opens the next channel by hand — one permission at a time, right down to individual channel toggles. Nobody hands a stranger the keys to the whole repo on day one.</p>
+        <div class="card-shot"><img src="shots/shot_1786317427.webp" alt="Channel access toggle for a workspace member"></div>
+      </div>
+
+      <div class="card card-sig reveal" id="sigCard">
+        <div class="sig-top">
+          <div>
+            <h3>Workspace, live in seconds</h3>
+            <p>Not a figure of speech — this is the actual sequence when a PM taps Accept.</p>
+          </div>
+          <div class="sig-timer">~10s</div>
+        </div>
+        <div class="sig-track">
+          <span class="sig-chip pm">PM taps Accept</span>
+          <span class="sig-chip">Grant Access fires</span>
+          <span class="sig-chip">Push notification sent</span>
+          <span class="sig-chip">#general</span>
+          <span class="sig-chip">#backend-api</span>
+          <span class="sig-chip">Kanban board</span>
+        </div>
+      </div>
+
+      <div class="card card-kanban reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h4m0-18h10a2 2 0 012 2v14a2 2 0 01-2 2H9m0-18v18"/></svg></div>
+        <h3>Kanban wired to channels</h3>
+        <p>Tap a label on a task, land straight in the channel where that work is actually being discussed.</p>
+        <div class="card-shot"><img src="shots/shot_1786317149.webp" alt="Kanban board with channel-linked labels"></div>
+      </div>
+
+      <div class="card card-github reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg></div>
+        <h3>GitHub, as a filter</h3>
+        <p>PMs set a minimum merged-PR threshold per role. Contribution graph and top languages sync straight to the profile.</p>
+        <div class="card-shot"><img src="shots/shot_1786317402.webp" alt="Profile with GitHub contribution graph and top languages"></div>
+      </div>
+
+      <div class="card card-huddles reveal">
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg></div>
+        <h3>Huddles, on demand</h3>
+        <p>Ephemeral audio calls tied to a channel — no calendar invite, no standing voice-channel to maintain. Jump in, jump out.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-eyebrow">How it works</span>
+      <h2>Four steps. No swiping.</h2>
+      <p class="section-desc">Browsing and applying are separate, deliberate actions — every application gets a manual review, not an algorithm.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="t-step active reveal">
+        <div class="t-num">01</div>
+        <div class="t-body">
+          <h3>Explore &amp; apply</h3>
+          <p>Filter open roles by tech stack. See verified GitHub stats before you ever apply. Tap "Apply" on the one role that fits — no swipe deck.</p>
+        </div>
+      </div>
+      <div class="t-step reveal">
+        <div class="t-num">02</div>
+        <div class="t-body">
+          <h3>PM reviews, manually</h3>
+          <p>Your application lands on the PM's Requests page, grouped by role, next to your contribution graph and merged PR count.</p>
+        </div>
+      </div>
+      <div class="t-step reveal">
+        <div class="t-num">03</div>
+        <div class="t-body">
+          <h3>Accept</h3>
+          <p>One unilateral decision from the PM. There's no mutual-match state to wait on — you'll know the moment it happens.</p>
+        </div>
+      </div>
+      <div class="t-step reveal">
+        <div class="t-num">04</div>
+        <div class="t-body">
+          <h3>Workspace, live</h3>
+          <p>RBAC-gated channels provision automatically. You land straight in Workspace Home — no invite link, no server setup.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="wrap final-inner">
+    <h2>Ready to stop<br><span class="grad-text">context-switching?</span></h2>
+    <p>Download the Android beta and go from Explore feed to a permissioned workspace in one sitting.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+        Download APK
+      </a>
+      <a class="btn btn-ghost" href="#">Join the iOS waitlist</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="wrap footer-inner">
+    <div class="footer-left">
+      <img class="footer-logo" src="reviar_logo_horizontal.png" alt="Reviar">
+      <span>© 2026 Reviar</span>
+      <div class="footer-links">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/delete-account">Delete my data</a>
+      </div>
+    </div>
+    <div class="footer-social">
+      <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.03 3.26 9.29 7.79 10.8.57.1.78-.25.78-.55v-2.14c-3.17.69-3.84-1.36-3.84-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.72-1.53-2.53-.29-5.19-1.27-5.19-5.63 0-1.24.44-2.26 1.17-3.06-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.14 1.17a10.9 10.9 0 015.72 0c2.18-1.48 3.14-1.17 3.14-1.17.62 1.58.23 2.75.11 3.04.73.8 1.17 1.82 1.17 3.06 0 4.37-2.67 5.34-5.21 5.62.41.36.77 1.06.77 2.14v3.17c0 .3.21.66.79.55A10.53 10.53 0 0023.5 12c0-6.28-5.23-11.5-11.5-11.5z"/></svg></a>
+      <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-6.7l-5.3-6.8L5.2 22H2l8.1-9.3L1 2h6.9l4.8 6.3L18.9 2zm-1.2 18h1.8L7.4 3.9H5.5L17.7 20z"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // hero screenshot carousel — cycles through every screenshot
+  const heroCaptions = [
+    'Sign in — email or GitHub',
+    'Browse open roles, no swiping',
+    'Apply straight to a role',
+    'Every project, one tab away',
+    'Channels, scoped to your role',
+    'Kanban wired to #channels',
+    'Talk shop in #frontend',
+    'Add a friend, not just a contact',
+    'PMs grant channel access by hand',
+    'Your workspace, your reputation',
+    'GitHub stats, synced automatically',
+    'DMs that outlive the project'
+  ];
+  const heroImgs = document.querySelectorAll('#heroShots img');
+  const heroCaptionEl = document.getElementById('heroCaptionText');
+  const progressWrap = document.getElementById('heroProgress');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const INTERVAL = 2600;
+  let heroIdx = 0;
+
+  heroImgs.forEach(() => {
+    const span = document.createElement('span');
+    span.innerHTML = '<i></i>';
+    progressWrap.appendChild(span);
+  });
+  const bars = progressWrap.querySelectorAll('span');
+
+  function setActive(i){
+    heroImgs.forEach(img => img.classList.remove('active'));
+    heroImgs[i].classList.add('active');
+    if(heroCaptionEl) heroCaptionEl.textContent = heroCaptions[i] || '';
+    bars.forEach((b, j) => {
+      b.classList.remove('active','done');
+      if(j < i) b.classList.add('done');
+      if(j === i) b.classList.add('active');
+    });
+  }
+
+  if(heroImgs.length){
+    setActive(0);
+    if(!prefersReduced){
+      setInterval(() => {
+        heroIdx = (heroIdx + 1) % heroImgs.length;
+        setActive(heroIdx);
+      }, INTERVAL);
+    }
+  }
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); } });
+  }, {threshold:0.15});
+  revealEls.forEach(el => io.observe(el));
+
+  // signature card provisioning sequence — replay each time it enters view
+  const sigCard = document.getElementById('sigCard');
+  const sigIo = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        sigCard.classList.remove('in');
+        void sigCard.offsetWidth;
+        sigCard.classList.add('in');
+      }
+    });
+  }, {threshold:0.4});
+  sigIo.observe(sigCard);
+</script>
+
+</body>
+</html>
