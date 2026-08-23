@@ -16,10 +16,35 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Reviar — Stop matching. Start shipping.",
+  metadataBase: new URL("https://reviar-web.vercel.app"),
+
+  title: "Reviar — slide into your next project.",
   description:
-    "Reviar auto-provisions the entire workspace — RBAC-gated channels, Kanban, Pods (Voice chat system) — the instant a PM taps Accept.",
+    "Reviar auto-provisions the entire workspace — RBAC-gated channels, Task boards, Pods (Voice chat system) — for every project",
   icons: { icon: "/icon.png" },
+  openGraph: {
+    title: "Reviar — slide into your next project.",
+    description:
+      "Reviar auto-provisions the entire workspace — RBAC-gated channels, Task boards, Pods — for every project",
+    url: "https://reviar-web.vercel.app",
+    siteName: "Reviar",
+    images: [
+      {
+        url: "/icon.png", // Next.js automatically serves everything in /public from the root URL
+        width: 512, // Adjust dimensions to match your icon's actual size
+        height: 512,
+        alt: "Reviar Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Reviar — slide into your next project.",
+    description: "Reviar auto-provisions your workspace — for every project.",
+    images: ["/icon.png"],
+  },
 };
 
 export default function RootLayout({

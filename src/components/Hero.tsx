@@ -62,9 +62,7 @@ export default function Hero() {
                 marginBottom: 22,
               }}
             >
-              Stop matching.
-              <br />
-              <GradText>Start shipping.</GradText>
+              Slide into your <GradText>Next Project</GradText>
             </h1>
 
             <p
@@ -76,18 +74,24 @@ export default function Hero() {
                 marginBottom: 34,
               }}
             >
-              Every dev-matching app hands you a swipe deck, a match, and a bare DM
-              thread — then wishes you luck.{" "}
+              Every dev-matching app hands you a swipe deck, a match, and a bare
+              DM thread — then wishes you luck.{" "}
               <strong style={{ color: "var(--text)", fontWeight: 600 }}>
                 Reviar auto-provisions the entire workspace
               </strong>{" "}
-              — RBAC-gated channels, Kanban, Pods (Voice chat system), even the friendship that outlasts
-              the project — the instant a PM taps Accept.
+              — RBAC-gated channels, Kanban, Pods (Voice chat system), even the
+              friendship that outlasts the project — All for you
             </p>
 
             <div className="cta-row" id="download">
               <Link href={release} className="btn btn-primary">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  aria-hidden
+                >
                   <path d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14" />
                 </svg>
                 Download APK
@@ -95,8 +99,14 @@ export default function Hero() {
               <IosWaitlistModal
                 trigger={
                   <span className="btn btn-ghost" style={{ cursor: "pointer" }}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden
-                      style={{ width: 18, height: 18 }}>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden
+                      style={{ width: 18, height: 18 }}
+                    >
                       <path d="M17 2H7a2 2 0 00-2 2v16a2 2 0 002 2h10a2 2 0 002-2V4a2 2 0 00-2-2zM12 18h.01" />
                     </svg>
                     Notify me for iOS
