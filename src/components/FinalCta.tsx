@@ -1,12 +1,17 @@
 import Link from "next/link";
 import GradText from "./GradText";
 
+import releaseData from "../links/v1-link.json";
+import IosWaitlistModal from "./IosWaitlistModal";
+
 const STATS = [
   { val: "~10s", label: "workspace provisioned" },
   { val: "0", label: "manual setup steps" },
   { val: "1-tap", label: "to apply for a role" },
   { val: "∞", label: "friendships after ship" },
 ];
+
+export const release = releaseData[1];
 
 export default function FinalCta() {
   return (
@@ -37,10 +42,13 @@ export default function FinalCta() {
         style={{
           position: "absolute",
           inset: 0,
-          backgroundImage: "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
+          backgroundImage:
+            "radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
-          WebkitMaskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%)",
-          maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%)",
+          maskImage:
+            "radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%)",
           zIndex: 0,
           pointerEvents: "none",
         }}
@@ -48,7 +56,6 @@ export default function FinalCta() {
       />
 
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-
         {/* Stats row */}
         <div
           style={{
@@ -66,7 +73,8 @@ export default function FinalCta() {
                 style={{
                   fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
                   fontWeight: 700,
-                  background: "linear-gradient(100deg, var(--cyan), var(--purple))",
+                  background:
+                    "linear-gradient(100deg, var(--cyan), var(--purple))",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -76,7 +84,13 @@ export default function FinalCta() {
               >
                 {s.val}
               </div>
-              <div style={{ fontSize: 12, color: "var(--text-faint)", letterSpacing: "0.03em" }}>
+              <div
+                style={{
+                  fontSize: 12,
+                  color: "var(--text-faint)",
+                  letterSpacing: "0.03em",
+                }}
+              >
                 {s.label}
               </div>
             </div>
@@ -106,20 +120,30 @@ export default function FinalCta() {
             lineHeight: 1.7,
           }}
         >
-          Download the Android beta and go from Explore feed to a fully permissioned,
-          channel-structured workspace in one sitting.
+          Download the Android beta and go from Explore feed to a fully
+          permissioned, channel-structured workspace in one sitting.
         </p>
 
         <div className="cta-row" style={{ justifyContent: "center" }}>
-          <Link href="#" className="btn btn-primary" style={{ fontSize: 16, padding: "16px 32px" }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+          <Link
+            href={release}
+            className="btn btn-primary"
+            style={{ fontSize: 16, padding: "16px 32px" }}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden
+            >
               <path d="M12 3v13m0 0l-4-4m4 4l4-4M5 21h14" />
             </svg>
             Download APK — it&apos;s free
           </Link>
-          <Link href="#" className="btn btn-ghost" style={{ fontSize: 16, padding: "16px 32px" }}>
-            Join the iOS waitlist
-          </Link>
+
+          {/* This is the fixed component placement */}
+          <IosWaitlistModal />
         </div>
 
         {/* Fine print */}

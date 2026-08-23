@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Reviar — Stop matching. Start shipping.",
   description:
-    "Reviar auto-provisions the entire workspace — RBAC-gated channels, Kanban, Huddles — the instant a PM taps Accept.",
+    "Reviar auto-provisions the entire workspace — RBAC-gated channels, Kanban, Pods (Voice chat system) — the instant a PM taps Accept.",
   icons: { icon: "/icon.png" },
 };
 
